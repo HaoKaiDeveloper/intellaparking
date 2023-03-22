@@ -10,7 +10,7 @@
       </div>
       <p class="msg">請於{{ leavaLimTime }}分鐘內離場 <span>謝謝使用</span></p>
 
-      <router-link to="/">
+      <router-link to="/" @click="goHomePage">
         <button>確認</button>
       </router-link>
     </main>
@@ -51,16 +51,12 @@ export default {
       if (res.status === "0000") {
         result.value = true;
         leavaLimTime.value = res.result.leaveLimtTime;
-        setTimeout(() => {
-          clearLocalStorage();
-          router.replace("/");
-        }, 4500);
       } else {
         result.value = false;
         setTimeout(() => {
           clearLocalStorage();
           router.replace("/");
-        }, 4500);
+        }, 10000);
       }
     }
 
@@ -68,9 +64,14 @@ export default {
       localStorage.clear();
     }
 
+    function goHomePage() {
+      clearLocalStorage();
+    }
+
     return {
       result,
       leavaLimTime,
+      goHomePage,
     };
   },
 };

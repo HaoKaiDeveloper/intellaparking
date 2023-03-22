@@ -4,7 +4,7 @@
     <main>
       <img
         v-for="car in cars"
-        :src="car.img"
+        :src="carImg"
         :alt="car.licensePlate"
         :key="car.licensePlate"
         @click="goCheckoutPage(car)"
@@ -15,7 +15,6 @@
 
 <script>
 import carImg from "../../assets/C51589.jpg";
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 export default {
