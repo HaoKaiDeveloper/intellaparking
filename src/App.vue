@@ -1,26 +1,48 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <router-view></router-view>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap");
+:root {
+  --yellow-1: rgb(255, 236, 171);
+  --yellow-2: rgb(254, 215, 63);
+
+  --grey-1: #fff;
+  --grey-2: #e0e0e0;
+  --grey-3: #757575;
+  --grey-4: #212121;
+
+  --shadow-1: 5px 5px 10px rgba(0, 0, 0, 0.6);
+
+  --f-l: 2.3rem;
+  --f-mi: 1.8rem;
+  --f-s: 1.5rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  width: 100%;
+  height: 100%;
+}
+button {
+  cursor: pointer;
 }
 </style>

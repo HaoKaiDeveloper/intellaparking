@@ -1,0 +1,75 @@
+取得所有廠站資訊 api
+
+reponse
+{
+    "status": "0000",
+    "message": "",
+    "result": [{
+        "name": "台北xx停車場",
+	   "parkingToken":"super",
+        "leaveLimtTime": "15", //離開時間
+        "queryMode": "onlyNumber" //純數字=onlyNumber 英數字=Alphanumeric 英數包含-=AlphanumericContain-
+    }]
+}
+
+取得交易QRcode api
+request
+{	
+    "buyerEmail": "intella@intella.co",
+    "buyerPhone": "0912345678",
+    "carrierNum": "/1234567",//載具號碼
+    "loveCode": "1111",
+    "buyerUBN": "12345678",//統一編號
+    "licensePlate":"ABC1234"//完整車牌	
+
+	"parkingToken":"super",
+	"amount":"300",
+	"licensePlate":"1234AB" //假設金額不由前端輸入
+}
+
+reponse
+{
+    "status": "0000",
+    "message": "",
+    "result": {
+        "paymentUrl": "https://a.intella.co/intella",
+        "orderId": ""
+    }
+}
+
+查詢場站相關設定api
+request
+{
+	"parkingToken":"super"
+}
+
+reponse
+{
+    "status": "0000",
+    "message": "",
+    "result": {
+        "name": "台北xx停車場",
+        "leaveLimtTime": "15", //單位為分鐘
+        "queryMode": "onlyNumber" //純數字=onlyNumber 英數字=Alphanumeric 英數包含-=AlphanumericContain-
+    }
+}
+
+
+查詢車牌金額api
+request
+{
+	"licensePlate":"1234AB",
+	"parkingToken":"super"
+}
+
+reponse
+{
+    "status": "0000",
+    "message": "",
+    "result": [{
+	  "licensePlate":"1234-AB"
+        "entryTime": "yyyy-MM-dd HH:mm:ss",
+        "amount": "60",
+        "img": "base64_img"
+    }]
+}
