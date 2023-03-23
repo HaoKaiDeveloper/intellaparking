@@ -4,7 +4,7 @@
     <main>
       <img
         v-for="car in cars"
-        :src="carImg"
+        :src="`data:image/jpeg;base64,${car.img}`"
         :alt="car.licensePlate"
         :key="car.licensePlate"
         @click="goCheckoutPage(car)"

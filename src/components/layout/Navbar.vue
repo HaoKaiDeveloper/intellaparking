@@ -23,6 +23,9 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const parkingToken = JSON.parse(
+      localStorage.getItem("parkingInfo")
+    ).parkingToken;
 
     const navName = computed(() => {
       switch (route.name) {
@@ -47,7 +50,7 @@ export default {
         if (counter.value <= 1) {
           counter.value = 0;
           clearCountdownInterval();
-          router.replace("/");
+          toHomePage();
         }
       }, 1000);
     }
@@ -58,7 +61,7 @@ export default {
     }
 
     function toHomePage() {
-      router.replace({ path: "/" });
+      router.replace({ path: `/${parkingToken}` });
     }
 
     return {

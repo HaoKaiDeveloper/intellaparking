@@ -56,7 +56,6 @@ const store = createStore({
     },
     async getCheckoutQrCode(context, payload) {
       try {
-        console.log(payload);
         //request
         //   {
         //     "buyerEmail": "",
@@ -87,12 +86,6 @@ const store = createStore({
     },
     async checkPaymentSuccess(context, payload) {
       try {
-        //request
-        // {
-        //   orderId:""//由轉跳url參數帶入
-        // }
-        //response 回傳已經成功或失敗，及出場時間
-
         const response = await axios.post(
           "https://a.intella.co/intella-parking/api/order/getOrder",
           {

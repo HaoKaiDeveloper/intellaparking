@@ -5,17 +5,17 @@ const router = createRouter({
   routes: [
     {
       name: "setdata",
-      path: "/home",
+      path: "/",
       component: () => import("../views/SetDataPage.vue"),
       children: [
         {
           name: "home",
-          path: "",
+          path: "/:parkingToken",
           component: () => import("../views/SetDataPage.vue"),
         },
       ],
     },
-    { path: "/:pathMatch(.*)*", redirect: "/home" },
+    { path: "/:pathMatch(.*)*", redirect: "/" },
     {
       name: "paymentSteps",
       path: "/steps",

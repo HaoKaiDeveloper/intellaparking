@@ -41,6 +41,7 @@ body {
   font-family: "Noto Sans TC", sans-serif;
   width: 100%;
   height: 100%;
+  scroll-behavior: smooth;
 }
 button {
   cursor: pointer;

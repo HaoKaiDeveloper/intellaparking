@@ -2,7 +2,7 @@
   <section class="popup">
     <div class="backdrop" @click="closePopup"></div>
     <div class="list">
-      <button @click="closePopup">
+      <button @click="closePopup" type="button">
         <icon icon="fa-solid fa-circle-xmark" />
       </button>
 
@@ -77,6 +77,7 @@ export default {
 }
 
 button {
+  color: var(--grey-4);
   font-size: 2.5rem;
   background: none;
   border: none;

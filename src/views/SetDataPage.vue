@@ -22,7 +22,7 @@
 
       <div class="licenseInfo">
         <input
-          type="number"
+          type="text"
           placeholder="請輸入車牌數字號碼"
           v-model="parkingInfo.licensePlate"
         />
@@ -48,18 +48,21 @@
           <button
             :class="activeInvoice === 'memberCode' ? 'active' : ''"
             @click="setActiveInvoice('memberCode')"
+            type="button"
           >
             會員載具
           </button>
           <button
             :class="activeInvoice === 'phoneCode' ? 'active' : ''"
             @click="setActiveInvoice('phoneCode')"
+            type="button"
           >
             手機載具
           </button>
           <button
             :class="activeInvoice === 'donationCode' ? 'active' : ''"
             @click="setActiveInvoice('donationCode')"
+            type="button"
           >
             捐贈發票
           </button>
@@ -95,7 +98,9 @@
         <div class="donationCode" v-else-if="activeInvoice === 'donationCode'">
           <label for="donate">
             *捐贈發票
-            <button @click="toggleDonateList(true)">(機構及團體名單)</button>
+            <button @click="toggleDonateList(true)" type="button">
+              (機構及團體名單)
+            </button>
             <input type="number" id="donate" v-model="clientInfo.loveCode" />
           </label>
         </div>
@@ -119,9 +124,11 @@ export default {
   components: { DonateList },
   setup() {
     const store = useStore();
-    const { query } = useRoute();
+    const { params } = useRoute();
+    const route = useRoute();
+
     const router = useRouter();
-    const activeInvoice = ref("memberCode");
+    const activeInvoice = ref("");
     const openDonateList = ref(false);
     const errorMsg = ref("");
     const parkingList = ref([]);
@@ -140,10 +147,11 @@ export default {
 
     init();
     async function init() {
-      const queryObj = Object.keys(query).length;
+      const paramsObj = Object.keys(params).length;
+      activeInvoice.value = "memberCode";
       localStorage.clear();
-      if (queryObj === 1) {
-        parkingInfo.parkingToken = query.parkingToken;
+      if (paramsObj === 1) {
+        parkingInfo.parkingToken = params.parkingToken;
       }
       const resList = await store.dispatch("getAllParkingList", {
         parkingToken: parkingInfo.parkingToken,
@@ -217,7 +225,7 @@ export default {
         return false;
       }
       if (isNaN(parkingInfo.licensePlate)) {
-        setErrorMsg("輸入數字部分即可");
+        setErrorMsg("輸入車牌數字部分即可");
         return false;
       }
       return true;
@@ -242,7 +250,7 @@ export default {
       const parkingInfoValidation = parkingInfoValida();
 
       if (!clientInfoValidation || !parkingInfoValidation) {
-        setErrorMsg("請輸入完整資訊");
+        // setErrorMsg("請輸入完整資訊");
         return;
       }
       const res = await store.dispatch("getAllCarsInfo", parkingInfo);
@@ -353,9 +361,14 @@ aside {
 .parkingInfo {
   font-size: var(--f-l);
   font-weight: 500;
+  color: var(--grey-4);
   select {
     font-size: var(--f-l);
-    margin: 0 1em;
+    margin: 0 0.7em;
+
+    @media screen and (max-width: 350px) {
+      margin: 1rem 0;
+    }
   }
   option {
     font-size: var(--f-mi);
@@ -372,6 +385,10 @@ aside {
     font-size: 3rem;
     margin-bottom: 0.5em;
     border-radius: 7px;
+    /* transition: all 0.3s;
+    &:focus {
+      transform: scale(1.5);
+    } */
   }
   input[type="radio"] {
     width: 20px;
@@ -404,6 +421,7 @@ aside {
       padding: 0.3em 0.5em;
       border-radius: 7px;
       border: 1px solid var(--grey-3);
+      color: var(--grey-4);
 
       &.active {
         background-color: var(--yellow-2);
@@ -416,8 +434,13 @@ aside {
   .memberCode,
   .phoneCode,
   .donationCode {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     input,
     label {
+      display: block;
       width: 100%;
       font-size: var(--f-mi);
       border-radius: 7px;
@@ -426,6 +449,10 @@ aside {
     input {
       padding: 0.5em;
       margin: 0.5em 0;
+      /* transition: all 0.3s;
+      &:focus {
+        transform: scale(1.05);
+      } */
     }
   }
 

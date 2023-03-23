@@ -7,12 +7,16 @@
 
 <script>
 import Navbar from "../../components/layout/Navbar.vue";
-import { ref } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+
 export default {
   components: { Navbar },
-  setup() {},
+  setup() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  },
 };
 </script>
 
