@@ -76,22 +76,42 @@
               id="memberCode"
               placeholder="會員編號/手機號碼"
               v-model="clientInfo.buyerPhone"
+              @focus="zoomInInput"
+              @blur="zoomOutInput"
             />
           </label>
           <label for="email"
             >*電子信箱
-            <input type="text" id="email" v-model="clientInfo.buyerEmail" />
+            <input
+              type="text"
+              id="email"
+              v-model="clientInfo.buyerEmail"
+              @focus="zoomInInput"
+              @blur="zoomOutInput"
+            />
           </label>
           <label for="taxId"
             >輸入統編
-            <input type="number" id="taxId" v-model="clientInfo.buyerUBN" />
+            <input
+              type="number"
+              id="taxId"
+              v-model="clientInfo.buyerUBN"
+              @focus="zoomInInput"
+              @blur="zoomOutInput"
+            />
           </label>
         </div>
 
         <div class="phoneCode" v-else-if="activeInvoice === 'phoneCode'">
           <label for="phone">
             *手機載具
-            <input type="text" id="phone" v-model="clientInfo.carrierNum" />
+            <input
+              type="text"
+              id="phone"
+              v-model="clientInfo.carrierNum"
+              @focus="zoomInInput"
+              @blur="zoomOutInput"
+            />
           </label>
         </div>
 
@@ -101,7 +121,13 @@
             <button @click="toggleDonateList(true)" type="button">
               (機構及團體名單)
             </button>
-            <input type="number" id="donate" v-model="clientInfo.loveCode" />
+            <input
+              type="number"
+              id="donate"
+              v-model="clientInfo.loveCode"
+              @focus="zoomInInput"
+              @blur="zoomOutInput"
+            />
           </label>
         </div>
       </form>
@@ -245,6 +271,22 @@ export default {
       activeInvoice.value = val;
     }
 
+    function toggleDonateList(val) {
+      openDonateList.value = val;
+    }
+
+    function zoomInInput() {
+      const allMeta = document.querySelectorAll("meta");
+      const viewportMeta = allMeta[2];
+      viewportMeta.content = "width=device-width,initial-scale=1.2";
+    }
+
+    function zoomOutInput() {
+      const allMeta = document.querySelectorAll("meta");
+      const viewportMeta = allMeta[2];
+      viewportMeta.content = "width=device-width,initial-scale=1.0";
+    }
+
     async function getAllCarsInfo() {
       const clientInfoValidation = clientInfoValida();
       const parkingInfoValidation = parkingInfoValida();
@@ -266,10 +308,6 @@ export default {
       }
     }
 
-    function toggleDonateList(val) {
-      openDonateList.value = val;
-    }
-
     return {
       logo,
       activeInvoice,
@@ -281,6 +319,8 @@ export default {
       parkingInfo,
       parkingList,
       errorMsg,
+      zoomInInput,
+      zoomOutInput,
     };
   },
 };
@@ -448,10 +488,14 @@ aside {
 
     input {
       padding: 0.5em;
-      margin: 0.5em 0;
-      /* transition: all 0.3s;
-      &:focus {
-        transform: scale(1.05);
+      margin: 0.7em 0;
+      /* transition: all 0.3s; */
+      letter-spacing: 1px;
+      /* &:focus {
+        transform: scaleY(1.25);
+        transform-origin: bottom;
+        font-size: var(--f-mi);
+        line-height: 1.5;
       } */
     }
   }
