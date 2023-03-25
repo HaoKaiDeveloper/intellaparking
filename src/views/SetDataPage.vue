@@ -76,42 +76,22 @@
               id="memberCode"
               placeholder="會員編號/手機號碼"
               v-model="clientInfo.buyerPhone"
-              @focus="zoomInInput"
-              @blur="zoomOutInput"
             />
           </label>
           <label for="email"
             >*電子信箱
-            <input
-              type="text"
-              id="email"
-              v-model="clientInfo.buyerEmail"
-              @focus="zoomInInput"
-              @blur="zoomOutInput"
-            />
+            <input type="text" id="email" v-model="clientInfo.buyerEmail" />
           </label>
           <label for="taxId"
             >輸入統編
-            <input
-              type="number"
-              id="taxId"
-              v-model="clientInfo.buyerUBN"
-              @focus="zoomInInput"
-              @blur="zoomOutInput"
-            />
+            <input type="number" id="taxId" v-model="clientInfo.buyerUBN" />
           </label>
         </div>
 
         <div class="phoneCode" v-else-if="activeInvoice === 'phoneCode'">
           <label for="phone">
             *手機載具
-            <input
-              type="text"
-              id="phone"
-              v-model="clientInfo.carrierNum"
-              @focus="zoomInInput"
-              @blur="zoomOutInput"
-            />
+            <input type="text" id="phone" v-model="clientInfo.carrierNum" />
           </label>
         </div>
 
@@ -121,13 +101,7 @@
             <button @click="toggleDonateList(true)" type="button">
               (機構及團體名單)
             </button>
-            <input
-              type="number"
-              id="donate"
-              v-model="clientInfo.loveCode"
-              @focus="zoomInInput"
-              @blur="zoomOutInput"
-            />
+            <input type="number" id="donate" v-model="clientInfo.loveCode" />
           </label>
         </div>
       </form>
@@ -275,18 +249,6 @@ export default {
       openDonateList.value = val;
     }
 
-    function zoomInInput() {
-      const allMeta = document.querySelectorAll("meta");
-      const viewportMeta = allMeta[2];
-      viewportMeta.content = "width=device-width,initial-scale=1.2";
-    }
-
-    function zoomOutInput() {
-      const allMeta = document.querySelectorAll("meta");
-      const viewportMeta = allMeta[2];
-      viewportMeta.content = "width=device-width,initial-scale=1.0";
-    }
-
     async function getAllCarsInfo() {
       const clientInfoValidation = clientInfoValida();
       const parkingInfoValidation = parkingInfoValida();
@@ -319,8 +281,6 @@ export default {
       parkingInfo,
       parkingList,
       errorMsg,
-      zoomInInput,
-      zoomOutInput,
     };
   },
 };
@@ -425,10 +385,6 @@ aside {
     font-size: 3rem;
     margin-bottom: 0.5em;
     border-radius: 7px;
-    /* transition: all 0.3s;
-    &:focus {
-      transform: scale(1.5);
-    } */
   }
   input[type="radio"] {
     width: 20px;
@@ -442,7 +398,10 @@ aside {
 }
 
 .invoiceInfo {
-  width: 100%;
+  width: 80%;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
   border: 2px solid var(--grey-1);
   padding: 2em 1em;
   border-radius: 7px;
@@ -481,22 +440,20 @@ aside {
     input,
     label {
       display: block;
-      width: 100%;
+      width: 80%;
       font-size: var(--f-mi);
       border-radius: 7px;
     }
 
     input {
       padding: 0.5em;
-      margin: 0.7em 0;
-      /* transition: all 0.3s; */
+      margin: 0.5em auto;
+      transition: all 0.3s;
       letter-spacing: 1px;
-      /* &:focus {
-        transform: scaleY(1.25);
-        transform-origin: bottom;
-        font-size: var(--f-mi);
-        line-height: 1.5;
-      } */
+      width: 100%;
+      &:focus {
+        transform: scale(1.1);
+      }
     }
   }
 
