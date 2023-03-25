@@ -1,5 +1,8 @@
 <template>
   <section>
+    <div class="back">
+      <img :src="background" alt="back" />
+    </div>
     <main>
       <div class="logo">
         <img :src="logo" alt="logo" />
@@ -116,6 +119,7 @@
 
 <script>
 import logo from "../assets/logo.png";
+import background from "../assets/background.jpg";
 import { ref, reactive } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -272,6 +276,7 @@ export default {
 
     return {
       logo,
+      background,
       activeInvoice,
       setActiveInvoice,
       toggleDonateList,
@@ -301,8 +306,8 @@ main {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  background-image: url("../assets/background.jpg");
-  background-size: cover;
+  /* background-image: url("../assets/background.jpg"); */
+  /* background-size: cover; */
 
   display: flex;
   flex-direction: column;
@@ -310,6 +315,19 @@ main {
 
   gap: 1.5em;
   padding: 2em 1.5em;
+}
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .logo {
@@ -443,6 +461,14 @@ aside {
       width: 80%;
       font-size: var(--f-mi);
       border-radius: 7px;
+      letter-spacing: 1px;
+      font-weight: 400;
+    }
+
+    label {
+      &:focus-within {
+        font-weight: 500;
+      }
     }
 
     input {

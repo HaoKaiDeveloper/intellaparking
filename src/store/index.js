@@ -23,6 +23,12 @@ const store = createStore({
           );
         }
 
+        if (response.data.status === "9999") {
+          response = await axios.get(
+            "https://a.intella.co/intella-parking/api/parkingInfo/listAll"
+          );
+        }
+
         const { data } = response;
         if (data.status === "0000") {
           const { result } = data;
