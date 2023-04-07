@@ -4,7 +4,7 @@ const Timestamp = new Date().getTime();
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: "/intellaParking",
+  publicPath: "/p",
   outputDir: "intellaParking",
   devServer: {
     proxy: {

@@ -108,6 +108,7 @@
           </label>
         </div>
       </form>
+
       <aside>
         <p v-if="errorMsg.length > 0" class="errorMsg">{{ errorMsg }}</p>
         <button class="checkBtn" @click="getAllCarsInfo">確定</button>
@@ -312,6 +313,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   gap: 1.5em;
   padding: 2em 1.5em;
@@ -416,6 +418,7 @@ aside {
 }
 
 .invoiceInfo {
+  flex: 1;
   width: 80%;
   @media screen and (max-width: 500px) {
     width: 100%;
