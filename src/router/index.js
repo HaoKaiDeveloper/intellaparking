@@ -1,16 +1,20 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "vue-router";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       name: "setdata",
-      path: "/",
+      path: "/p",
       component: () => import("../views/SetDataPage.vue"),
       children: [
         {
           name: "home",
-          path: "/:parkingToken",
+          path: ":parkingToken",
           component: () => import("../views/SetDataPage.vue"),
         },
       ],
