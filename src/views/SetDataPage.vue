@@ -129,9 +129,8 @@ export default {
   components: { DonateList },
   setup() {
     const store = useStore();
-    const { params } = useRoute();
+    const { params, query } = useRoute();
     const route = useRoute();
-
     const router = useRouter();
     const activeInvoice = ref("");
     const openDonateList = ref(false);
@@ -152,6 +151,7 @@ export default {
 
     init();
     async function init() {
+      // console.log(query);
       const paramsObj = Object.keys(params).length;
       activeInvoice.value = "memberCode";
       localStorage.clear();
