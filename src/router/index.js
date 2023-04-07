@@ -5,11 +5,11 @@ import {
 } from "vue-router";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       name: "setdata",
-      path: "/p",
+      path: "/",
       component: () => import("../views/SetDataPage.vue"),
       children: [
         {
