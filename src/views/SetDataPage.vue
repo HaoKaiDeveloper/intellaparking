@@ -5,11 +5,14 @@
     </div>
     <main>
       <div class="logo">
-        <img :src="logo" alt="logo" />
+        <img
+          :src="parkingLogo ? `data:image/png;base64,${parkingLogo}` : logo"
+          alt="logo"
+        />
         <p>智能繳費平台</p>
       </div>
 
-      <div class="parkingInfo">
+      <div class="parkingInfo" v-if="parkingList.length > 1">
         <label>選擇停車場域</label>
         <select v-model="parkingInfo.parkingToken">
           <option
@@ -29,7 +32,7 @@
           placeholder="請輸入車牌數字號碼"
           v-model="parkingInfo.licensePlate"
         />
-        <label for="partTime">
+        <!-- <label for="partTime">
           <input
             type="radio"
             name="ParkimgTime"
@@ -42,7 +45,7 @@
         <label for="month">
           <input type="radio" value="month" name="ParkimgTime" id="month" />
           月租
-        </label>
+        </label> -->
       </div>
 
       <form class="invoiceInfo">
@@ -112,6 +115,7 @@
       <aside>
         <p v-if="errorMsg.length > 0" class="errorMsg">{{ errorMsg }}</p>
         <button class="checkBtn" @click="getAllCarsInfo">確定</button>
+        <img :src="logo" alt="intellaLogo" />
       </aside>
     </main>
     <DonateList v-if="openDonateList" @close-popup="toggleDonateList" />
@@ -121,7 +125,7 @@
 <script>
 import logo from "../assets/logo.png";
 import background from "../assets/background.jpg";
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import DonateList from "../components/SetDataPage/DonateList.vue";
@@ -132,11 +136,11 @@ export default {
     const { params, query } = useRoute();
     const route = useRoute();
     const router = useRouter();
-    const activeInvoice = ref("");
+    const activeInvoice = ref("memberCode");
     const openDonateList = ref(false);
     const errorMsg = ref("");
     const parkingList = ref([]);
-    const clientInfo = reactive({
+    const clientInfo = ref({
       buyerPhone: "", //10位數純數字(手機載具)
       buyerEmail: "", //@
       buyerUBN: "", //8位數純數字(統編)
@@ -149,70 +153,78 @@ export default {
       parkingToken: "", //停車場域id
     });
 
+    const parkingLogo = computed(() => {
+      let pLogo;
+      if (parkingList.value.length > 0) {
+        pLogo = parkingList.value.find(
+          (parking) => parking.parkingToken === parkingInfo.parkingToken
+        ).parkinglogo;
+      } else {
+        pLogo = "";
+      }
+      return pLogo;
+    });
+
     init();
     async function init() {
       // console.log(query);
       const paramsObj = Object.keys(params).length;
-      activeInvoice.value = "memberCode";
-      localStorage.clear();
       if (paramsObj === 1) {
         parkingInfo.parkingToken = params.parkingToken;
       }
       const resList = await store.dispatch("getAllParkingList", {
         parkingToken: parkingInfo.parkingToken,
       });
+
       parkingList.value = resList;
+      console.log(parkingList.value);
       parkingInfo.parkingToken = resList[0].parkingToken;
+
+      let localClientInfo = localStorage.getItem("clientInfo");
+      if (localClientInfo) {
+        localClientInfo = JSON.parse(localClientInfo);
+        clientInfo.value = { ...clientInfo.value, ...localClientInfo };
+      }
     }
 
     function clientInfoValida() {
       if (activeInvoice.value === "memberCode") {
-        clientInfo.carrierNum = "";
-        clientInfo.loveCode = "";
         if (
-          clientInfo.buyerPhone === "" ||
-          clientInfo.buyerEmail === "" ||
-          !clientInfo.buyerEmail.includes("@")
+          clientInfo.value.buyerPhone === "" ||
+          clientInfo.value.buyerEmail === "" ||
+          !clientInfo.value.buyerEmail.includes("@")
         ) {
           setErrorMsg("請輸入完整資訊");
           return false;
         }
         if (
-          clientInfo.buyerPhone.length !== 10 ||
-          isNaN(parseInt(clientInfo.buyerPhone))
+          clientInfo.value.buyerPhone.length !== 10 ||
+          isNaN(parseInt(clientInfo.value.buyerPhone))
         ) {
           setErrorMsg("會員載具格是錯誤");
           return false;
         }
-        if (clientInfo.buyerUBN) {
+        if (clientInfo.value.buyerUBN) {
           if (
-            clientInfo.buyerUBN.toString().length !== 8 ||
-            isNaN(clientInfo.buyerUBN)
+            clientInfo.value.buyerUBN.toString().length !== 8 ||
+            isNaN(clientInfo.value.buyerUBN)
           ) {
             setErrorMsg("統一編號為8位數字");
             return false;
           }
         }
       } else if (activeInvoice.value === "phoneCode") {
-        clientInfo.buyerEmail = "";
-        clientInfo.buyerPhone = "";
-        clientInfo.buyerUBN = "";
-        clientInfo.loveCode = "";
         if (
-          clientInfo.carrierNum.length === 0 ||
-          clientInfo.carrierNum.length !== 8
+          clientInfo.value.carrierNum.length === 0 ||
+          clientInfo.value.carrierNum.length !== 8
         ) {
-          setErrorMsg("手機載具格式錯誤");
+          setErrorMsg("手機載具為8碼");
           return false;
         }
       } else if (activeInvoice.value === "donationCode") {
-        clientInfo.buyerEmail = "";
-        clientInfo.buyerPhone = "";
-        clientInfo.buyerUBN = "";
-        clientInfo.carrierNum = "";
         if (
-          clientInfo.loveCode.toString().length === 0 ||
-          isNaN(clientInfo.loveCode)
+          clientInfo.value.loveCode.toString().length === 0 ||
+          isNaN(clientInfo.value.loveCode)
         ) {
           setErrorMsg("捐贈碼格式錯誤");
           return false;
@@ -263,15 +275,20 @@ export default {
         return;
       }
       const res = await store.dispatch("getAllCarsInfo", parkingInfo);
+
       if (res.length > 0) {
         //把資料存進local
         localStorage.setItem("parkingInfo", JSON.stringify(parkingInfo));
-        localStorage.setItem("clientInfo", JSON.stringify(clientInfo));
+        localStorage.setItem("clientInfo", JSON.stringify(clientInfo.value));
         localStorage.setItem("allCarsInfo", JSON.stringify(res));
+        localStorage.setItem(
+          "activeInvoice",
+          JSON.stringify(activeInvoice.value)
+        );
         //轉跳到下一頁
-        router.replace("/steps/carSelect");
+        router.replace("/p/steps/carSelect");
       } else {
-        setErrorMsg("查無車輛");
+        setErrorMsg("此場域查無車輛");
       }
     }
 
@@ -286,6 +303,7 @@ export default {
       clientInfo,
       parkingInfo,
       parkingList,
+      parkingLogo,
       errorMsg,
     };
   },
@@ -313,9 +331,9 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 
-  gap: 1.5em;
+  gap: 1em;
   padding: 2em 1.5em;
 }
 .back {
@@ -334,11 +352,14 @@ main {
 
 .logo {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   gap: 1em;
   margin-bottom: 1.5em;
   img {
-    width: 10em;
+    width: 100%;
+    max-width: 250px;
+    min-width: 150px;
   }
   p {
     font-size: 2.8rem;
@@ -348,9 +369,31 @@ main {
 }
 
 aside {
+  width: 80%;
   position: relative;
   padding-top: 2em;
   width: 100%;
+  /* border: 1px solid red; */
+  button {
+    position: relative;
+    z-index: 2;
+  }
+  img {
+    width: 100px;
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p {
+    white-space: nowrap;
+  }
+  @media screen and (max-width: 500px) {
+    img {
+      width: 60px;
+      right: 0%;
+    }
+  }
 }
 .errorMsg {
   position: absolute;
@@ -418,13 +461,12 @@ aside {
 }
 
 .invoiceInfo {
-  flex: 1;
   width: 80%;
   @media screen and (max-width: 500px) {
     width: 100%;
   }
   border: 2px solid var(--grey-1);
-  padding: 2em 1em;
+  padding: 1em 1em;
   border-radius: 7px;
   p {
     font-size: var(--f-l);

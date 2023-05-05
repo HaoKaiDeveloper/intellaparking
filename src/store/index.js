@@ -12,7 +12,6 @@ const store = createStore({
       //所有場域list
       try {
         let response;
-        console.log(payload);
         if (payload.parkingToken) {
           response = await axios.post(
             "https://a.intella.co/intella-parking/api/parkingInfo/getOne",
@@ -83,7 +82,7 @@ const store = createStore({
         );
         const { data } = response;
         if (data.status === "0000") {
-          return data.result;
+          return data;
         } else {
           return { paymentUrl: "", orderId: "" };
         }

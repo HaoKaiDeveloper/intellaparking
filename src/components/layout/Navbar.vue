@@ -61,7 +61,7 @@ export default {
     }
 
     function toHomePage() {
-      router.replace({ path: `/${parkingToken}` });
+      router.replace({ path: `/p/${parkingToken}` });
     }
 
     return {

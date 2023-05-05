@@ -2,6 +2,7 @@ const pjson = require("./package.json");
 const PACKAGE_VERSION = "'" + pjson.version + "'";
 const Timestamp = new Date().getTime();
 const { defineConfig } = require("@vue/cli-service");
+const path = require("path");
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: "/p",
@@ -22,8 +23,8 @@ module.exports = defineConfig({
   },
   configureWebpack: {
     output: {
-      filename: `[name].${PACKAGE_VERSION}.${Timestamp}.js`,
-      chunkFilename: `[name].${PACKAGE_VERSION}.${Timestamp}.js`,
+      filename: `js/[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
+      chunkFilename: `js/[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
     },
   },
   pluginOptions: {

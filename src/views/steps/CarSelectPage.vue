@@ -27,7 +27,22 @@ export default {
     const cars = JSON.parse(localStorage.getItem("allCarsInfo"));
 
     async function goCheckoutPage(carInfo) {
-      const clientInfo = JSON.parse(localStorage.getItem("clientInfo"));
+      let clientInfo = JSON.parse(localStorage.getItem("clientInfo"));
+      const activeInvoice = JSON.parse(localStorage.getItem("activeInvoice"));
+
+      if (activeInvoice === "memberCode") {
+        clientInfo.carrierNum = "";
+        clientInfo.loveCode = "";
+      } else if (activeInvoice === "phoneCode") {
+        clientInfo = {
+          carrierNum: clientInfo.carrierNum,
+        };
+      } else {
+        clientInfo = {
+          loveCode: clientInfo.loveCode,
+        };
+      }
+
       const car = cars.filter(
         (car) => car.licensePlate === carInfo.licensePlate
       );
@@ -44,12 +59,21 @@ export default {
         ...car[0],
         parkingToken,
       });
+      console.log({
+        ...clientInfo,
+        ...car[0],
+        parkingToken,
+      });
 
-      if (res.paymentUrl.length > 0) {
+      if (res.message === "2222") {
+        return router.push(`/p/freePayment`);
+      }
+
+      if (res.result.paymentUrl.length > 0) {
         localStorage.setItem("paymentUrl", JSON.stringify(res));
-        router.push(`/steps/checkout/${car[0].licensePlate}`);
+        router.push(`/p/steps/checkout/${car[0].licensePlate}`);
       } else {
-        router.push("/");
+        router.push(`/p/${parkingToken}`);
       }
     }
 

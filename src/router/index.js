@@ -5,11 +5,11 @@ import {
 } from "vue-router";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       name: "setdata",
-      path: "/",
+      path: "/p",
       component: () => import("../views/SetDataPage.vue"),
       children: [
         {
@@ -19,10 +19,15 @@ const router = createRouter({
         },
       ],
     },
-    { path: "/:pathMatch(.*)*", redirect: "/" },
+    {
+      name: "home",
+      path: "/p/:parkingToken",
+      component: () => import("../views/SetDataPage.vue"),
+    },
+    { path: "/:pathMatch(.*)*", redirect: "/p" },
     {
       name: "paymentSteps",
-      path: "/steps",
+      path: "/p/steps",
       component: () => import("../views/steps/Steps.vue"),
       children: [
         {
@@ -40,7 +45,12 @@ const router = createRouter({
     {
       name: "result",
       component: () => import("../views/PaymentResult.vue"),
-      path: "/result",
+      path: "/p/result",
+    },
+    {
+      name: "freePayment",
+      component: () => import("../views/FreePaymentPage.vue"),
+      path: "/p/freePayment",
     },
   ],
 });

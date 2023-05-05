@@ -10,8 +10,8 @@
             入場時間 :
             {{ carInfo.entryTime }}
           </p>
-          <p>停車時間: 1小時23分</p>
-          <p>應繳金額: {{ carInfo.amount }}</p>
+          <p>停車時間 : {{ carInfo.parkingTime }}</p>
+          <p>應繳金額 : {{ carInfo.amount }}</p>
         </div>
       </div>
     </main>
@@ -24,7 +24,7 @@
       </a>
     </div>
 
-    <router-link to="/steps/carSelect">
+    <router-link to="/p/steps/carSelect">
       <button>上一頁</button>
     </router-link>
   </section>
@@ -40,9 +40,11 @@ export default {
   components: { QrcodeVue },
   setup() {
     const allCars = JSON.parse(localStorage.getItem("allCarsInfo"));
-    const paymentUrl = JSON.parse(
-      localStorage.getItem("paymentUrl")
-    ).paymentUrl;
+    const paymentUrl = JSON.parse(localStorage.getItem("paymentUrl")).result
+      .paymentUrl;
+    const parkingToken = JSON.parse(
+      localStorage.getItem("parkingInfo")
+    ).parkingToken;
     const route = useRoute();
     const router = useRouter();
     const { licensePlate } = route.params;
@@ -50,7 +52,7 @@ export default {
 
     const car = allCars.filter((car) => car.licensePlate === licensePlate);
     if (car.length < 1) {
-      router.push("/");
+      router.push(`/p/${parkingToken}`);
       return;
     }
     carInfo.value = car[0];

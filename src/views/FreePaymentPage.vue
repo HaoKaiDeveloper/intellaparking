@@ -1,28 +1,17 @@
 <template>
   <section>
-    <main class="success" v-if="result">
+    <main class="success">
       <div>
         <span class="icon">
           <icon icon="fa-solid fa-check" />
         </span>
-        <p>付款成功</p>
-        <p>發票將寄送至您指定工具</p>
+        <p>無須繳費</p>
       </div>
-      <p class="msg">請於{{ leavaLimTime }}分鐘內離場 <span>謝謝使用</span></p>
+      <p class="msg">請於指定時間內離場 <span>謝謝使用</span></p>
 
       <router-link :to="`/p/${parkingToken.value}`" @click="goHomePage">
         <button>確認</button>
       </router-link>
-    </main>
-
-    <main class="fail" v-else>
-      <div>
-        <span class="icon">
-          <icon icon="fa-solid fa-exclamation" />
-        </span>
-        <p>付款失敗</p>
-        <p>將回到首頁</p>
-      </div>
     </main>
   </section>
 </template>
@@ -33,37 +22,13 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 export default {
   setup() {
-    const result = ref(true);
-    const leavaLimTime = ref("15");
-    const route = useRoute();
     const router = useRouter();
-    const store = useStore();
-    const paymentVal = route.query.payment;
     const parkingToken = ref("");
     let parkingInfo = localStorage.getItem("parkingInfo");
 
     if (parkingInfo) {
       parkingInfo = JSON.parse(parkingInfo);
       parkingToken.value = parkingInfo.parkingToken;
-    }
-
-    checkOrderPayment();
-    async function checkOrderPayment() {
-      if (paymentVal.length < 1 || !paymentVal) {
-        router.replace(`/p/${parkingToken.value}`);
-        return;
-      }
-      const res = await store.dispatch("checkPaymentSuccess", paymentVal);
-      console.log(res);
-      if (res.status === "0000") {
-        result.value = true;
-        leavaLimTime.value = res.result.leaveLimtTime;
-      } else {
-        result.value = false;
-        setTimeout(() => {
-          goHomePage();
-        }, 10000);
-      }
     }
 
     function goHomePage() {
@@ -74,8 +39,6 @@ export default {
     }
 
     return {
-      result,
-      leavaLimTime,
       goHomePage,
       parkingToken,
     };
