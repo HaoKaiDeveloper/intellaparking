@@ -1,7 +1,12 @@
 <template>
   <section class="popup">
     <div class="backdrop" @click="closePopup"></div>
+
     <div class="list">
+      <!-- <label for="lovecode">
+        <input type="tel" id="lovecode" v-model="loveCode" />
+      </label> -->
+
       <button @click="closePopup" type="button">
         <icon icon="fa-solid fa-circle-xmark" />
       </button>
@@ -12,8 +17,8 @@
           <th>受捐贈機關或團體名稱</th>
         </tr>
         <tr v-for="donate in list" :key="donate.code" class="item">
-          <td>{{ donate.code }}</td>
-          <td>{{ donate.fullname }}</td>
+          <td>{{ donate.捐贈碼 }}</td>
+          <td>{{ donate.受捐贈機關或團體名稱 }}</td>
         </tr>
       </table>
     </div>
@@ -22,14 +27,12 @@
 
 <script>
 import { donate } from "../../invoiceDonate";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 export default {
   emits: ["close-popup"],
   setup(props, contenxt) {
     const list = computed(() => {
-      return donate.sort((a, b) => {
-        return a.code - b.code;
-      });
+      return donate;
     });
 
     function closePopup() {
@@ -48,6 +51,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
 }
 
 .backdrop {

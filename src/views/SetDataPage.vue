@@ -107,7 +107,12 @@
             <button @click="toggleDonateList(true)" type="button">
               (機構及團體名單)
             </button>
-            <input type="number" id="donate" v-model="clientInfo.loveCode" />
+            <input
+              type="number"
+              id="donate"
+              :placeholder="clientInfo.loveCode"
+              v-model="clientInfo.loveCode"
+            />
           </label>
         </div>
       </form>
